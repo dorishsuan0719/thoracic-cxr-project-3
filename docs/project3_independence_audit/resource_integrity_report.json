@@ -1,0 +1,79 @@
+{
+  "project_root": "C:\\Users\\09688\\thoracic-cxr-project-3",
+  "backend_modules": [
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\src\\full_image_multilabel_inference_service.py",
+      "exists": true
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\src\\full_image_multilabel_ollama_service.py",
+      "exists": true
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\src\\full_image_multilabel_report_prompt.py",
+      "exists": true
+    }
+  ],
+  "model": {
+    "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_224_multilabel_seed42\\phase2_patch_transfer\\checkpoints\\full_image_multilabel_patch_transfer.pt",
+    "exists": true,
+    "bytes": 334144130,
+    "sha256": "0287fe36d3623ccdb5aa43857db1168a1598788071ebdecbc43324a6953f426f"
+  },
+  "thresholds": {
+    "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_224_multilabel_seed42\\phase2_patch_transfer\\validation_selected_thresholds.json",
+    "exists": true,
+    "bytes": 1388,
+    "sha256": "73a54c9b6a3de2b2f63479b0bd918836cedb577a29255b0f6e0b30dac310e9d5"
+  },
+  "ground_truth_catalog": {
+    "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_ground_truth_catalog\\full_image_ground_truth_manifest.csv",
+    "exists": true,
+    "rows": 590,
+    "missing_images": 0,
+    "outside_project3_paths": 0,
+    "missing_examples": []
+  },
+  "demo_images": {
+    "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_ground_truth_catalog\\demo_images",
+    "count": 30,
+    "first_5": [
+      "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_ground_truth_catalog\\demo_images\\01__91e721ea0143333c5efe5dfb8ca98746__GT_labels_0-1-2-3-4.png",
+      "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_ground_truth_catalog\\demo_images\\02__a77bfe2433adc567669ac27ed874b0ed__GT_labels_0-1-2-3-4.png",
+      "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_ground_truth_catalog\\demo_images\\03__e2f74cb96fb90ec20839f4ff497c007f__GT_labels_0-1-2-3-4.png",
+      "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_ground_truth_catalog\\demo_images\\04__74292e695d6b5868b89acf26363ee93e__GT_labels_0-1-2-3-4.png",
+      "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_ground_truth_catalog\\demo_images\\05__ce51a9ef3a4afc873a483972c2264c2f__GT_labels_0-1-2-3-4.png"
+    ]
+  },
+  "manifests": {
+    "train": {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_224_multilabel_seed42\\phase0_dataset\\train_manifest.csv",
+      "rows": 472,
+      "missing_images": 0,
+      "outside_project3_paths": 0,
+      "old_path_refs": 0,
+      "missing_examples": []
+    },
+    "val": {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_224_multilabel_seed42\\phase0_dataset\\val_manifest.csv",
+      "rows": 59,
+      "missing_images": 0,
+      "outside_project3_paths": 0,
+      "old_path_refs": 0,
+      "missing_examples": []
+    },
+    "test": {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_224_multilabel_seed42\\phase0_dataset\\test_manifest.csv",
+      "rows": 59,
+      "missing_images": 0,
+      "outside_project3_paths": 0,
+      "old_path_refs": 0,
+      "missing_examples": []
+    }
+  },
+  "session_output_dir": {
+    "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_multilabel_gradio_demo",
+    "exists": true,
+    "writable": true
+  }
+}

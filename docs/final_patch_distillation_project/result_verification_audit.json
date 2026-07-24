@@ -1,0 +1,437 @@
+{
+  "checks": {
+    "bootstrap_12_rows_all_10000_valid_0_invalid_and_ci_contains_zero": true,
+    "cls_cache_shape_4725_by_768": true,
+    "cls_phase1_pass": true,
+    "confusion_matrices_match_prompt": true,
+    "holm_adjusted_p_all_one": true,
+    "layernorm_audit_pass": true,
+    "leakage_all_zero": true,
+    "mcnemar_p_values_match": true,
+    "paired_rows_454": true,
+    "patch_cache_numerical_errors_zero": true,
+    "patch_cache_shape_4725_by_768_by_7_by_7": true,
+    "patch_phase1_milestones_match": true,
+    "per_class_f1_match_prompt": true,
+    "phase0_manifest_pass": true,
+    "phase2_completed_and_best_epochs_match": true,
+    "source_image_count_59": true,
+    "split_counts_match": true,
+    "test_evaluation_count_all_one": true,
+    "three_model_overall_metrics_match_prompt": true
+  },
+  "clarifications": [
+    {
+      "detail": "Summed epoch_total_seconds across all 84 epochs = 3860.760577 seconds (64.346010 minutes). The final audit training_wall_time_seconds = 1774.709040 seconds records the resumed segment, not all epoch durations.",
+      "topic": "Patch Phase 1 time"
+    },
+    {
+      "detail": "The formal original-size/224 ROI corpus contains 4,546 annotations. The balanced Phase 1 set contains 4,256 selected original ROI plus 469 existing brightness-augmented ROI, totaling 4,725.",
+      "topic": "Original ROI counts"
+    },
+    {
+      "detail": "One pre-existing temporary checkpoint was found at outputs/raddino_convnext_tiny_experiment_seed42/phase1_distillation/checkpoints/interrupted.pt.tmp. It is outside this documentation output, was not created or modified by this task, and was left untouched because existing outputs are protected.",
+      "topic": "Pre-existing temporary file"
+    }
+  ],
+  "created_at_utc": "2026-07-20T16:26:24.579886+00:00",
+  "prohibited_actions_executed": {
+    "image_inference": false,
+    "split_or_checkpoint_modification": false,
+    "test_evaluation": false,
+    "threshold_tuning": false,
+    "training": false,
+    "validation_evaluation": false
+  },
+  "prompt_discrepancies": [],
+  "protected_existing_outputs_modified": false,
+  "temporary_file_audit": {
+    "current_task_tmp_created": 0,
+    "preexisting_tmp_count": 1,
+    "preexisting_tmp_paths": [
+      "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_experiment_seed42\\phase1_distillation\\checkpoints\\interrupted.pt.tmp"
+    ]
+  },
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\comparison_summary.json",
+      "sha256": "0950224382d6b29d99d892b5fbe670d7d18bb7b19fadc35c36a99521c33f574b",
+      "size_bytes": 75919
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\tables\\overall_metrics_comparison.csv",
+      "sha256": "8dc00f5ef44905e50f7e045870bc4fb8923e29e7c244b71332345a0b294b369a",
+      "size_bytes": 1137
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\tables\\per_class_f1_comparison.csv",
+      "sha256": "e4304a98c61b94585e1bbda2a494c84f95c95f69847417d9cc61a8fdfcfe1bb6",
+      "size_bytes": 722
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\tables\\training_efficiency_comparison.csv",
+      "sha256": "87505be0064a8309ce23991a56a267251326f6552e0757a27fd85301cd40d1a6",
+      "size_bytes": 972
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\statistics\\cluster_bootstrap_results.csv",
+      "sha256": "3ba0b45dd86195171b2ad1e03b4aa6f619cc127d69abe6e0efe5020a2863f5cc",
+      "size_bytes": 3324
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\statistics\\mcnemar_pairwise_results.csv",
+      "sha256": "14d98ad97780d6ccd9abdb5d9934232e9751308ffcd3878d56b20029bd303d18",
+      "size_bytes": 618
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\statistics\\mcnemar_holm_adjusted.csv",
+      "sha256": "67090c3fa1e865387cd1613524145bcb492a4497ae40b151d4a98ed05428e92d",
+      "size_bytes": 271
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\layernorm_initialization_audit.json",
+      "sha256": "97143c61a97aae13cdd78cd9fdc72eb6559d5d080033955401cb646a67cc4c87",
+      "size_bytes": 17285
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_three_model_comparison_seed42\\predictions\\paired_three_model_test_predictions.csv",
+      "sha256": "d511dac999471656c091d926e1485e156636860b2872da6acd33235c5dfe351f",
+      "size_bytes": 410355
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_experiment_seed42\\phase2_split\\split_summary.json",
+      "sha256": "68d9508984b51784463fe1a35b37038218a8cd0318f8b6482d943ff8527d82e4",
+      "size_bytes": 4309
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_feature_cache\\balanced_945_seed42\\audit_summary.json",
+      "sha256": "e0b426f67ab2b6fe148858122529d56db27da910a54cbce670c28f734062b5f3",
+      "size_bytes": 1425
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_feature_cache\\balanced_945_seed42\\teacher_feature_metadata.json",
+      "sha256": "4637b8f4e33b8d3be2f9b8df1dc0b9152a9c065fa59766777c4e6915f5a76ca7",
+      "size_bytes": 3088
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_experiment_seed42\\phase1_distillation\\diagnostics\\phase1_final_audit.json",
+      "sha256": "d6fc58d86990a3d8d343fb726a1d73afec0fef21b20a5ff632bd9cb66e59d1f5",
+      "size_bytes": 1471
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_patch_experiment_seed42\\phase0_patch_teacher_cache\\teacher_patch_feature_metadata.json",
+      "sha256": "87d15a645fdcbf2497ec2a99b2d3ee43ecf8ceca1efc4b36e8b037ffdec11458",
+      "size_bytes": 10662
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_patch_experiment_seed42\\phase1_patch_distillation\\diagnostics\\phase1_patch_final_audit.json",
+      "sha256": "fd723a575f73918ad07dc129e65e23ad399553dc7c772c200f5fd2b487483001",
+      "size_bytes": 8144
+    },
+    {
+      "path": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\raddino_convnext_tiny_patch_experiment_seed42\\phase1_patch_distillation\\metrics\\phase1_patch_metrics.csv",
+      "sha256": "4f66e2b1272d65e933a96fec8ee0bd199147b137eef0e751fcc16e598cfdad85",
+      "size_bytes": 43834
+    }
+  ],
+  "status": "PASS",
+  "verification_method": "Read and cross-check existing CSV/JSON artifacts only; no training, validation/test evaluation, checkpoint selection, or model/image inference.",
+  "verified_values": {
+    "cls_phase1": {
+      "best_cosine": 0.8480030057417652,
+      "best_normalized_mse": 0.00039582563336894273,
+      "epochs": 30
+    },
+    "cls_teacher_feature_shape": [
+      4725,
+      768
+    ],
+    "cluster_bootstrap": {
+      "all_ci_include_zero": true,
+      "all_invalid_replicates": [
+        0
+      ],
+      "all_valid_replicates": [
+        10000
+      ],
+      "rows": 12
+    },
+    "confusion_matrices": {
+      "baseline": [
+        [
+          77,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          77,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          51,
+          21,
+          40
+        ],
+        [
+          2,
+          1,
+          4,
+          99,
+          0
+        ],
+        [
+          0,
+          0,
+          20,
+          2,
+          59
+        ]
+      ],
+      "cls": [
+        [
+          77,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          77,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          52,
+          24,
+          36
+        ],
+        [
+          2,
+          0,
+          2,
+          100,
+          2
+        ],
+        [
+          0,
+          0,
+          26,
+          1,
+          54
+        ]
+      ],
+      "patch": [
+        [
+          77,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          77,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          65,
+          25,
+          22
+        ],
+        [
+          2,
+          0,
+          2,
+          102,
+          0
+        ],
+        [
+          0,
+          0,
+          37,
+          2,
+          42
+        ]
+      ]
+    },
+    "dataset": {
+      "formal_original_roi": 4546,
+      "leakage_counts": {
+        "augmentation_source_cross_split": 0,
+        "image_path_cross_split": 0,
+        "image_sha256_cross_split": 0,
+        "original_roi_id_cross_split": 0,
+        "source_image_id_cross_split": 0,
+        "super_group_cross_split": 0
+      },
+      "phase1_balanced_total": 4725,
+      "phase1_brightness_augmented_roi": 469,
+      "phase1_selected_original_roi": 4256,
+      "phase2_roi_train_val_test": [
+        3770,
+        454,
+        454
+      ],
+      "source_full_images": 590,
+      "source_split_train_val_test": [
+        472,
+        59,
+        59
+      ]
+    },
+    "holm_adjusted_p": {
+      "cls_minus_baseline": 1.0,
+      "patch_minus_baseline": 1.0,
+      "patch_minus_cls": 1.0
+    },
+    "layernorm_initialization": {
+      "baseline": "ImageNet ConvNeXt-Tiny weights",
+      "cls": "RAD-DINO CLS Phase 1 distilled checkpoint",
+      "patch": "torchvision default initialization; no ImageNet classifier loaded",
+      "potential_cls_vs_patch_confounder": true
+    },
+    "mcnemar_exact_p": {
+      "cls_minus_baseline": 0.770866994573,
+      "patch_minus_baseline": 1.0,
+      "patch_minus_cls": 0.765991824245
+    },
+    "overall_test_metrics": {
+      "accuracy": {
+        "baseline": 0.799559471366,
+        "cls_proposed": 0.79295154185,
+        "patch_proposed": 0.799559471366
+      },
+      "loss": {
+        "baseline": 0.604004159373,
+        "cls_proposed": 0.531535144682,
+        "patch_proposed": 0.5213696056
+      },
+      "macro_auroc": {
+        "baseline": 0.948420218737,
+        "cls_proposed": 0.950664535571,
+        "patch_proposed": 0.950580781191
+      },
+      "macro_f1": {
+        "baseline": 0.807999579266,
+        "cls_proposed": 0.801748192622,
+        "patch_proposed": 0.805259370123
+      },
+      "macro_precision": {
+        "baseline": 0.808540135245,
+        "cls_proposed": 0.801058171939,
+        "patch_proposed": 0.808109785784
+      },
+      "macro_recall": {
+        "baseline": 0.820978791183,
+        "cls_proposed": 0.812305618909,
+        "patch_proposed": 0.8096638599
+      },
+      "weighted_f1": {
+        "baseline": 0.790428159968,
+        "cls_proposed": 0.784409792305,
+        "patch_proposed": 0.791780305482
+      }
+    },
+    "paired_rows": 454,
+    "patch_phase1": {
+      "best_epoch": 84,
+      "best_monitor_cosine": 0.8984613290410772,
+      "best_monitor_mse": 0.00026442373185615653,
+      "epochs": 84,
+      "resumed_segment_wall_seconds": 1774.7090402999893,
+      "summed_epoch_minutes": 64.34600962499681,
+      "summed_epoch_seconds": 3860.7605774998083
+    },
+    "patch_teacher_grid": [
+      37,
+      37
+    ],
+    "patch_teacher_native_shape": [
+      32,
+      768,
+      37,
+      37
+    ],
+    "patch_teacher_patch_size": [
+      14,
+      14
+    ],
+    "patch_teacher_shape": [
+      4725,
+      768,
+      7,
+      7
+    ],
+    "per_class_f1": {
+      "Aortic enlargement": [
+        0.987179487179,
+        0.987179487179,
+        0.987179487179
+      ],
+      "Cardiomegaly": [
+        0.987179487179,
+        0.993548387097,
+        0.993548387097
+      ],
+      "Pleural effusion": [
+        0.655555555556,
+        0.624277456647,
+        0.579310344828
+      ],
+      "Pleural thickening": [
+        0.545454545455,
+        0.541666666667,
+        0.601851851852
+      ],
+      "Pulmonary fibrosis": [
+        0.864628820961,
+        0.862068965517,
+        0.864406779661
+      ]
+    },
+    "phase2_training_efficiency": {
+      "ImageNet Baseline": {
+        "best_epoch": 19,
+        "completed_epochs": 25,
+        "formal_training_wall_seconds": 816.909588,
+        "peak_allocated_vram_gb": 5.218476772308,
+        "peak_reserved_vram_gb": 5.486328125
+      },
+      "RAD-DINO CLS Proposed": {
+        "best_epoch": 9,
+        "completed_epochs": 19,
+        "formal_training_wall_seconds": 620.02287,
+        "peak_allocated_vram_gb": 5.218476772308,
+        "peak_reserved_vram_gb": 5.486328125
+      },
+      "RAD-DINO Patch Proposed": {
+        "best_epoch": 4,
+        "completed_epochs": 14,
+        "formal_training_wall_seconds": 457.796368,
+        "peak_allocated_vram_gb": 5.218476772308,
+        "peak_reserved_vram_gb": 5.486328125
+      }
+    },
+    "source_image_count": 59,
+    "test_evaluation_count": {
+      "baseline": 1,
+      "cls": 1,
+      "patch": 1
+    }
+  }
+}

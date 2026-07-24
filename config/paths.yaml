@@ -1,0 +1,14 @@
+project_root: C:\Users\09688\thoracic-cxr-project-3
+annotation_sources:
+  combined: C:\Users\09688\thoracic-cxr-project-3\data\raw\annotations\annotations.csv
+image_search_dirs:
+  - C:\Users\09688\thoracic-cxr-project-3\data\raw\images
+full_image_multilabel:
+  model: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_224_multilabel_seed42\phase2_patch_transfer\checkpoints\full_image_multilabel_patch_transfer.pt
+  thresholds: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_224_multilabel_seed42\phase2_patch_transfer\validation_selected_thresholds.json
+  ground_truth_catalog: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_ground_truth_catalog\full_image_ground_truth_manifest.csv
+  train_manifest: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_224_multilabel_seed42\phase0_dataset\train_manifest.csv
+  val_manifest: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_224_multilabel_seed42\phase0_dataset\val_manifest.csv
+  test_manifest: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_224_multilabel_seed42\phase0_dataset\test_manifest.csv
+  demo_images: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_ground_truth_catalog\demo_images
+  session_outputs: C:\Users\09688\thoracic-cxr-project-3\outputs\full_image_multilabel_gradio_demo

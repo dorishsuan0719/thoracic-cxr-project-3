@@ -1,0 +1,56 @@
+{
+  "url": "http://127.0.0.1:7860",
+  "pid": 33112,
+  "root_http_200": true,
+  "config_http_200": true,
+  "config_title": "AI 輔助胸腔 X 光多標籤辨識系統",
+  "contracts": [
+    {
+      "api_name": "load_example",
+      "inputs": 1,
+      "outputs": 1,
+      "generator": false
+    },
+    {
+      "api_name": "lambda",
+      "inputs": 0,
+      "outputs": 1,
+      "generator": false
+    },
+    {
+      "api_name": "analyze_event",
+      "inputs": 7,
+      "outputs": 14,
+      "generator": true
+    },
+    {
+      "api_name": "js_fn",
+      "inputs": 0,
+      "outputs": 0,
+      "generator": false
+    },
+    {
+      "api_name": "js_fn_1",
+      "inputs": 0,
+      "outputs": 0,
+      "generator": false
+    },
+    {
+      "api_name": "regenerate_event",
+      "inputs": 7,
+      "outputs": 6,
+      "generator": false
+    },
+    {
+      "api_name": "clear_all",
+      "inputs": 0,
+      "outputs": 20,
+      "generator": false
+    }
+  ],
+  "upload_status_code": 200,
+  "upload_returned_paths": 1,
+  "clear_complete": true,
+  "clear_output_count": 20,
+  "server_log_clean_after_restart": true
+}

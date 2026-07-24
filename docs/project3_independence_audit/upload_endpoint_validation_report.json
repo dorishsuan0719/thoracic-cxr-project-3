@@ -1,0 +1,19 @@
+{
+  "upload_status_code": 200,
+  "uploaded_path": "C:\\Users\\09688\\AppData\\Local\\Temp\\gradio\\bc99c3c9ccec304baeb231137cd3486f33c9b9ff2292ac354d0a7e3fc768a83a\\01__91e721ea0143333c5efe5dfb8ca98746__GT_labels_0-1-2-3-4.png",
+  "uploaded_path_exists": true,
+  "yield_count": 4,
+  "yield_lengths": [
+    14,
+    14,
+    14,
+    14
+  ],
+  "all_yields_14": true,
+  "ground_truth_text_has_tp": true,
+  "session_dir": "C:\\Users\\09688\\thoracic-cxr-project-3\\outputs\\full_image_multilabel_gradio_demo\\sessions\\20260722T170421121646Z_a60ae9fe",
+  "pdf_exists": true,
+  "md_exists": true,
+  "ollama_status": "UNAVAILABLE",
+  "report_contains_disclaimer": true
+}

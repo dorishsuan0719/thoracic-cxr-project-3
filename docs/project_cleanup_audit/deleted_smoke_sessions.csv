@@ -1,0 +1,10 @@
+﻿kind,relative_path,target_path,size_bytes,sha256,reason,status
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T145242536147Z_b503824b,,8880,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T153121710223Z_25f0c599,,8634,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T155325001459Z_bac1f639,,8782,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T162103318878Z_b463a7d5,,329347,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T162926664398Z_ec6470d3,,328228,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T165050863915Z_f00009b5,,261617,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T165410357067Z_b61b9d57,,261634,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T165902937239Z_d4b6b0a9,,268817,,session_audit.json has smoke_test=true,deleted
+delete_smoke_session,outputs\full_image_multilabel_gradio_demo\sessions\20260721T175146347359Z_3cd4f9c9,,268640,,session_audit.json has smoke_test=true,deleted

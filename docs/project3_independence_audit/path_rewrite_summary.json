@@ -1,0 +1,7 @@
+{
+  "rewrites": 594,
+  "image_manifest_path_rewrites": 590,
+  "missing_mappings": 0,
+  "rewrite_map": "C:\\Users\\09688\\thoracic-cxr-project-3\\docs\\project3_independence_audit\\path_rewrite_map.csv",
+  "missing_map": "C:\\Users\\09688\\thoracic-cxr-project-3\\docs\\project3_independence_audit\\missing_path_mappings.csv"
+}

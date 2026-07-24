@@ -1,0 +1,11 @@
+﻿TANET section,claim,value,source_file,verification_status
+摘要/3,五類正式類別,Aortic enlargement; Cardiomegaly; Pleural thickening; Pulmonary fibrosis; Pleural effusion,thesis_evidence_trace_v2.csv; 15_final_verified_thesis_facts.md,verified
+3.1,ROI balanced rows,4725; 945 per class; brightness augmented rows 469,05_verified_dataset_counts.csv; 14_conflict_resolution.md,verified
+3.1,ROI grouped split,train 3770; val 454; test 454,05_verified_dataset_counts.csv,verified
+3.1,Full-image split,train 472; val 59; test 59,05_verified_dataset_counts.csv,verified
+3.2,Feature shapes,"CLS [4725,768]; Patch [4725,768,7,7]",07_model_training_settings.csv,verified
+3.3,Thresholds,"0.50, 0.50, 0.39, 0.36, 0.34",thesis_evidence_trace_v2.csv,verified
+4,Phase 1 distillation results,CLS loss 0.0003958256/cosine 0.8480030057; Patch MSE 0.0002644237/cosine 0.89846133,06_verified_metrics.csv; thesis_evidence_trace_v2.csv,verified
+4.1,ROI test metrics,Baseline Accuracy 0.7996; Patch Accuracy 0.7996; Patch Macro-F1 0.8053,06_verified_metrics.csv,verified
+4.2,Full-image test metrics,Macro-F1 0.7865; Micro-F1 0.7859; Exact Subset Accuracy 0.1695,06_verified_metrics.csv,verified
+5,Demo flow,ConvNeXt-Tiny -> Sigmoid -> thresholds -> prediction vector -> GT post-hoc -> Ollama text -> report,09_demo_execution_flow.md,verified
