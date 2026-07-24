@@ -1,2 +1,0 @@
-﻿chapter,section,problem_type,current_text_summary,verified_fact,source_file,recommended_revision,severity,affects_core_conclusion,automatic_fix_safe
-第二章,全章,missing citation,第二章仍含 9 處待補正式文獻標記。,外部文獻不可由專案輸出替代；作者、年份、期刊與 DOI 需由正式文獻來源確認。,16_unresolved_items_for_user.md,補入正式文獻來源後再移除標記；目前不可捏造文獻。,major,no,no

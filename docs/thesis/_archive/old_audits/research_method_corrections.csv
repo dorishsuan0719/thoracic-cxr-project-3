@@ -1,3 +1,0 @@
-﻿chapter_section,current_text,problem_type,current_value,verified_value,source_file,source_function_or_field,recommended_revision,confidence,requires_user_confirmation
-3.8/3.9,表 5 與 3.8/3.9 在研究方法章列出 distillation loss、cosine 等訓練結果值。,wording improvement,Phase1 result metrics are shown in Chapter 3,數字本身可由 evidence trace/正式 metrics 查證，但較適合移至第四章或改稱訓練摘要。,thesis_evidence_trace.csv; 06_verified_metrics.csv,Phase1 CLS/Patch distillation,第三章僅保留 loss、optimizer、batch size、epoch、checkpoint selection；將 best loss/cosine 詳細結果移至第四章，或表題改為 Phase 1 訓練設定與監控摘要。,medium,False
-3.16,硬體型號、作業系統版本、CUDA 與 PyTorch 版本等完整環境資訊目前未在第二輪證據中統一整理，因此本小節保留為〔待確認〕。,missing evidence,完整實驗環境,〔待確認〕,16_unresolved_items_for_user.md,未解決項目；需正式環境紀錄或 requirements/version audit,保留待確認，或由使用者提供正式環境紀錄後再補入。,high,True
