@@ -47,3 +47,4 @@ outputs/roi_balanced_224/**/images/
 *.writing
 Thumbs.db
 desktop.ini
+config/paths.yaml
