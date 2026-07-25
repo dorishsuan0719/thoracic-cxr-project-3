@@ -77,7 +77,7 @@ REGENERATE_OUTPUT_COUNT = 6
 PROBABILITY_TABLE_COLUMNS = ["類別", "英文名稱", "中文名稱", "機率", "Threshold", "判定"]
 _UI_ERROR_LOCK = threading.Lock()
 OLLAMA_FALLBACK = "分類已完成，但 Ollama 輔助說明暫時無法產生。"
-UI_LAYOUT_VERSION = "2026-07-22-exact-mockup-v1"
+UI_LAYOUT_VERSION = "2026-07-25-stable-ui-clinical-reference-v7-clean-report"
 GROUND_TRUTH_UNAVAILABLE = (
     "此影像不在目前 Ground Truth Catalog 中，因此僅顯示模型預測，不計算正確性。"
 )
@@ -101,6 +101,12 @@ APP_CSS = """
   --soft-green: #ecfdf3;
   --soft-yellow: #fff8dc;
   --soft-red: #fff1f2;
+  --slate: #64748b;
+  --slate-dark: #52606d;
+  --soft-teal: #e6f8f5;
+  --purple: #9a67f5;
+  --purple-dark: #7c4fe0;
+  --soft-purple: #f5efff;
 }
 
 * { box-sizing: border-box !important; }
@@ -176,7 +182,7 @@ html, body, .gradio-container {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  background: #9a67f5 !important;
+  background: var(--purple) !important;
   color: #fff !important;
   padding: 4px 10px;
   font-weight: 800;
@@ -191,12 +197,15 @@ html, body, .gradio-container {
   background: #f8fffc !important;
   padding: 7px 10px;
   text-align: left;
-  font-size: .78rem;
+  font-size: .8rem;
   line-height: 1.55;
+  display: flex;
+  align-items: center;
 }
 
 .health-ok { color: #08785f !important; font-weight: 800; }
 .health-dot { color: #12b886 !important; margin-right: 5px; }
+.header-icon { vertical-align: -3px; margin-right: 6px; color: var(--purple-dark); }
 
 .ui-card {
   background: var(--surface) !important;
@@ -261,15 +270,31 @@ html, body, .gradio-container {
 }
 
 .patient-card .ui-card-body { padding: 9px 13px 12px !important; }
-.patient-fields { gap: 12px !important; flex-wrap: wrap !important; }
-.patient-fields > * { min-width: 145px !important; }
-.patient-note-field { min-width: 250px !important; }
+.patient-fields {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+  gap: 12px !important;
+}
+.patient-note-field { grid-column: span 2 !important; min-width: 0 !important; }
+@media (max-width: 640px) {
+  .patient-note-field { grid-column: span 1 !important; }
+}
 
 .main-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: flex-start !important;
   gap: 18px !important;
 }
-.left-pane, .right-pane { min-width: 0 !important; }
+
+.left-pane,
+.right-pane {
+  flex: 1 1 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
 
 .gradio-container input,
 .gradio-container textarea,
@@ -287,12 +312,106 @@ html, body, .gradio-container {
   background: transparent !important;
 }
 
-.image-card .ui-card-body { padding: 0 !important; }
-.image-host { padding: 10px 14px 0 !important; }
-.image-host, .image-host > div { background: #fff !important; border: 0 !important; box-shadow: none !important; }
-.image-host .image-container, .image-host .image-frame, .image-host img { max-width: 100% !important; }
-.image-card .examples, .image-card .gallery, .image-card .gallery-wrap { background: transparent !important; border: 0 !important; box-shadow: none !important; }
-.image-aux { padding: 0 14px 8px !important; }
+.image-card {
+  width: 100% !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  background: #fff !important;
+  border: 1px solid var(--lavender-line) !important;
+  border-radius: 11px !important;
+  box-shadow: 0 2px 8px rgba(45, 55, 72, .045) !important;
+  overflow: hidden !important;
+}
+
+.image-card .ui-card-header {
+  min-height: auto !important;
+  margin: 0 !important;
+  padding: 4px 0 10px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.image-card .ui-card-header h3 {
+  margin: 0 !important;
+  line-height: 1.35 !important;
+}
+
+.image-card .card-header-host,
+.image-card .card-header-host > div {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.image-host {
+  padding: 8px 14px 0 !important;
+}
+
+.image-host,
+.image-host > div {
+  background: #fff !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.image-host .image-container,
+.image-host .image-frame,
+.image-host img {
+  max-width: 100% !important;
+}
+
+#cxr-image-input > .label-wrap,
+#cxr-image-input .label-wrap,
+#cxr-image-input > label {
+  display: none !important;
+}
+
+/* Stable Accordion styling: target our own elem_classes instead of Gradio's
+   internal .accordion / .label-wrap class names, which can change by version. */
+.app-accordion {
+  background: #fff !important;
+  border: 1px solid var(--lavender-line) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+.app-accordion > button,
+.app-accordion > summary,
+.app-accordion > .label-wrap,
+.app-accordion > [role="button"] {
+  width: 100% !important;
+  min-height: 38px !important;
+  background: linear-gradient(90deg, #fbf8ff 0%, #f5efff 100%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 8px 12px !important;
+  color: var(--ink) !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+.app-accordion > button:hover,
+.app-accordion > summary:hover,
+.app-accordion > .label-wrap:hover,
+.app-accordion > [role="button"]:hover {
+  background: #f3edff !important;
+}
+.gt-accordion.ui-card { border: 1px solid var(--lavender-line) !important; }
+.gt-accordion > button,
+.gt-accordion > summary,
+.gt-accordion > .label-wrap,
+.gt-accordion > [role="button"] {
+  min-height: 35px !important;
+  padding: 8px 13px !important;
+  font-size: 1rem !important;
+  font-weight: 900 !important;
+}
+.gt-accordion .ui-card-body { border-top: 1px solid #eee7fb !important; }
+.gt-hint { color: var(--muted) !important; font-size: .78rem; margin: 2px 0 0 !important; }
 
 .action-row {
   gap: 12px !important;
@@ -300,7 +419,9 @@ html, body, .gradio-container {
   margin: 0 !important;
   border-top: 1px solid #edf0f4 !important;
   background: #fff !important;
+  flex-wrap: wrap !important;
 }
+.action-row > * { flex: 1 1 130px !important; }
 
 .gradio-container button {
   min-height: 40px !important;
@@ -312,8 +433,10 @@ html, body, .gradio-container {
 }
 .primary-action:hover, .primary-action button:hover { background: var(--teal-dark) !important; }
 .secondary-action, .secondary-action button { background: var(--blue) !important; border-color: var(--blue) !important; color: #fff !important; }
-.print-action, .print-action button, .sheet-print-button, .sheet-print-button button { background: var(--yellow) !important; border-color: #e7b700 !important; color: #2c2500 !important; }
-.danger-action, .danger-action button { background: var(--red) !important; border-color: var(--red) !important; color: #fff !important; }
+.print-action, .print-action button, .sheet-print-button, .sheet-print-button button { background: var(--slate) !important; border-color: var(--slate-dark) !important; color: #fff !important; }
+.print-action:hover, .print-action button:hover, .sheet-print-button:hover, .sheet-print-button button:hover { background: var(--slate-dark) !important; }
+.danger-action, .danger-action button { background: #fff !important; border-color: #cfd7e2 !important; color: #4a5568 !important; }
+.danger-action:hover, .danger-action button:hover { background: #f5f6f8 !important; border-color: var(--red) !important; color: var(--red) !important; }
 
 .transparent-output,
 .transparent-output > div,
@@ -340,7 +463,7 @@ html, body, .gradio-container {
 
 .analysis-status .prose { margin: 0 !important; }
 .analysis-status .status-complete { color: var(--green) !important; font-size: 1.03rem; font-weight: 900; margin-bottom: 8px; }
-.analysis-status .status-grid { display: grid; grid-template-columns: 115px minmax(0,1fr); gap: 4px 8px; font-size: .86rem; }
+.analysis-status .status-grid { display: grid; grid-template-columns: 136px minmax(0,1fr); gap: 5px 8px; font-size: .86rem; }
 .analysis-status .status-label { font-weight: 800; color: #303b4d !important; }
 
 .summary-card .ui-card-body { min-height: 136px; }
@@ -348,13 +471,120 @@ html, body, .gradio-container {
 .prediction-summary li::marker { color: #1dbd7f; }
 .prediction-summary .vector-note { border-top: 1px solid #e6eaf0; margin-top: 10px; padding-top: 9px; font-size: .82rem; color: var(--muted) !important; }
 
-.gradio-container table,
-.gradio-container .table-wrap,
-.gradio-container .dataframe,
-.gradio-container .dataframe-container { max-width: 100% !important; overflow-x: auto !important; }
-.gradio-container table { background: #fff !important; font-size: .83rem !important; }
-.gradio-container th { background: #f5f7fa !important; color: #334155 !important; }
-.gradio-container td { background: #fff !important; }
+/* Stable probability table: this HTML and these classes are generated by us,
+   so row coloring does not depend on Gradio Dataframe DOM internals or JS. */
+.probability-card-body {
+  padding: 3px 14px 12px !important;
+}
+
+#probability-table-host,
+#probability-table-host > div,
+#probability-table-host .prose,
+#probability-table-host .html-container,
+.probability-table-host,
+.probability-table-host > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#probability-table-host .prose,
+#probability-table-host .html-container {
+  margin-block: 0 !important;
+}
+
+/* 外框使用覆蓋層繪製，避免被表格內容蓋住四個圓角。 */
+.probability-table-frame {
+  position: relative !important;
+  isolation: isolate !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+
+.probability-table-frame::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+  border: 1px solid #1f2937 !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+/* 只有內容負責水平捲動，固定外框維持在最上層。 */
+.probability-table-wrap {
+  position: relative !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.probability-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  table-layout: auto !important;
+  background: #fff !important;
+  font-size: .83rem !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.probability-table th,
+.probability-table td {
+  padding: 8px 9px !important;
+  border: 0 !important;
+  border-right: 1px solid #d8dee8 !important;
+  border-bottom: 1px solid #d8dee8 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+.probability-table th:last-child,
+.probability-table td:last-child {
+  border-right: 0 !important;
+}
+
+.probability-table tbody tr:last-child td {
+  border-bottom: 0 !important;
+}
+.probability-table th {
+  background: #f5f7fa !important;
+  color: #334155 !important;
+  font-weight: 900 !important;
+}
+.probability-table td { background: #fff !important; color: var(--ink) !important; }
+.probability-table tr.prob-positive td { background: var(--soft-red) !important; }
+.probability-table tr.prob-positive td:last-child { color: var(--red) !important; font-weight: 900 !important; }
+.probability-table tr.prob-negative td:last-child { color: #8a94a6 !important; font-weight: 700 !important; }
+.probability-table-empty {
+  border: 1px dashed #d7dde6 !important;
+  border-radius: 7px !important;
+  padding: 16px !important;
+  color: var(--muted) !important;
+  text-align: center !important;
+  background: #fafbfc !important;
+}
 
 .gt-compact .gt-match { color: var(--green) !important; font-weight: 900; }
 .gt-compact code { background: #f4f6f9 !important; padding: 1px 4px !important; }
@@ -400,11 +630,11 @@ html, body, .gradio-container {
 }
 #diagnosis-sheet h2 { margin: 0 0 3px !important; font-size: 1.35rem; line-height: 1.25; color: var(--ink) !important; }
 #diagnosis-sheet .sheet-subtitle, #diagnosis-sheet .sheet-meta { color: var(--muted) !important; font-size: .79rem; line-height: 1.45; }
-#diagnosis-sheet .research-stamp { border: 2px solid #ff8c93 !important; border-radius: 8px !important; color: #d82332 !important; padding: 7px 10px; font-weight: 900; transform: rotate(3deg); white-space: nowrap; }
+#diagnosis-sheet .research-stamp { border: 2px solid var(--purple) !important; border-radius: 8px !important; background: var(--soft-purple) !important; color: var(--purple-dark) !important; padding: 7px 10px; font-weight: 900; white-space: nowrap; }
 
 #diagnosis-sheet .report-top-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 16px; align-items: start; margin-bottom: 12px; }
 #diagnosis-sheet .basic-info-box { border-right: 1px solid #e3e7ed !important; padding-right: 15px; }
-#diagnosis-sheet .clinical-box { background: var(--soft-yellow) !important; border-radius: 7px !important; padding: 10px 12px !important; }
+#diagnosis-sheet .clinical-box { background: var(--soft-teal) !important; border-radius: 7px !important; padding: 10px 12px !important; }
 #diagnosis-sheet .clinical-box h3 { margin-top: 0 !important; }
 #diagnosis-sheet .clinical-diagnosis-list { margin: 5px 0 0 1.1rem !important; }
 #diagnosis-sheet .clinical-diagnosis-list li::marker { color: #d8a700; }
@@ -415,20 +645,51 @@ html, body, .gradio-container {
 #diagnosis-sheet p, #diagnosis-sheet li { color: #263244 !important; line-height: 1.65; font-size: .88rem; }
 #diagnosis-sheet ul, #diagnosis-sheet ol { margin: 4px 0 0 1.15rem; padding: 0; }
 #diagnosis-sheet .info-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 4px 14px; }
-#diagnosis-sheet .info-item { display: grid; grid-template-columns: 75px minmax(0,1fr); gap: 5px; font-size: .82rem; padding: 1px 0; }
-#diagnosis-sheet .info-label { color: #596579 !important; font-weight: 800; }
+#diagnosis-sheet .info-item {
+  display: grid;
+  grid-template-columns: 84px minmax(0,1fr);
+  gap: 5px;
+  min-width: 0;
+  font-size: .82rem;
+  padding: 1px 0;
+}
+#diagnosis-sheet .info-label {
+  color: #596579 !important;
+  font-weight: 800;
+}
+#diagnosis-sheet .info-value {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-all !important;
+}
 #diagnosis-sheet .warning-note { background: #fff8df !important; border: 1px solid #f3d66c !important; border-left: 4px solid #e2a800 !important; border-radius: 7px !important; padding: 9px 11px; color: #5d4900 !important; }
+#diagnosis-sheet .clinical-reference { display: grid; gap: 10px; }
+#diagnosis-sheet .clinical-reference-intro { margin: 0 !important; }
+#diagnosis-sheet .clinical-reference-item { border-left: 3px solid var(--teal) !important; padding: 7px 10px; background: #f8fffc !important; border-radius: 5px !important; }
+#diagnosis-sheet .clinical-reference-item strong { display: block; color: #164e63 !important; font-size: .92rem; margin-bottom: 3px; }
+#diagnosis-sheet .clinical-reference-item p { margin: 0 !important; }
+#diagnosis-sheet .clinical-reference-empty { background: #f7f9fb !important; border-radius: 6px !important; padding: 9px 11px; color: #445065 !important; }
+#diagnosis-sheet .clinical-reference-warning { background: #fff8df !important; border: 1px solid #f3d66c !important; border-left: 4px solid #e2a800 !important; border-radius: 7px !important; padding: 9px 11px; color: #5d4900 !important; font-weight: 800; }
 #diagnosis-sheet .sheet-downloads { background: #f7f9fb !important; border: 1px solid #e0e5eb !important; border-radius: 7px !important; margin-top: 10px; padding: 8px 10px; }
 
-.system-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px 24px; font-size: .84rem; }
-.system-item { display: grid; grid-template-columns: 140px minmax(0,1fr); gap: 8px; }
+.system-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 24px; font-size: .84rem; }
+.system-item { display: grid; grid-template-columns: 158px minmax(0,1fr); gap: 8px; }
 .system-label { font-weight: 900; color: #303b4d !important; }
 .system-value-ok { color: var(--green) !important; font-weight: 900; }
 
 @media (max-width: 1050px) {
   .app-shell { width: min(100% - 20px, 920px); }
-  .main-grid { flex-direction: column !important; }
-  .left-pane, .right-pane { width: 100% !important; }
+  .main-grid {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+  }
+  .left-pane,
+  .right-pane {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+  }
 }
 @media (max-width: 720px) {
   .app-topbar { flex-direction: column; }
@@ -849,13 +1110,15 @@ def generate_report_safe(
     structured_result: dict[str, Any],
     patient: dict[str, Any],
 ) -> tuple[str, dict[str, Any]]:
+    """Generate only the auxiliary narrative; fixed clinical references are separate."""
     try:
         result = ollama.generate(structured_result, patient)
-        response = append_followup_guidance(result["response"], structured_result)
+        response = ensure_disclaimer(result["response"])
         result = {**result, "response": response}
         return response, result
     except Exception as exc:
-        return append_followup_guidance(OLLAMA_FALLBACK, structured_result), {
+        fallback = ensure_disclaimer(OLLAMA_FALLBACK)
+        return fallback, {
             "status": "UNAVAILABLE",
             "backend": ollama.base_url,
             "model": ollama.selected_model or ollama.requested_model,
@@ -864,13 +1127,69 @@ def generate_report_safe(
             "error_message": str(exc),
             "image_sent_to_ollama": False,
             "ground_truth_sent_to_ollama": False,
-            "response": OLLAMA_FALLBACK,
+            "response": fallback,
         }
 
 
 
-def predicted_label_names(payload: dict[str, Any]) -> set[str]:
-    names = set(payload.get("predicted_class_names_en") or [])
+CLINICAL_REFERENCE_INTRO = (
+    "以下內容依據本次影像分析結果整理，供臨床評估參考；"
+    "實際判斷仍應結合病史、症狀、理學檢查、既往影像及正式放射科判讀。"
+)
+CLINICAL_REFERENCE_NO_POSITIVE = (
+    "目前未出現超過判定門檻的類別，"
+    "建議仍依臨床表現與正式影像判讀綜合評估。"
+)
+CLINICAL_REFERENCE_WARNING = (
+    "本系統為研究型 AI 輔助工具，本區內容不得單獨作為"
+    "診斷、檢查或治療決策依據。"
+)
+
+# 五類臨床評估文字為設計者依一般國際臨床指引背景整理的固定研究型參考內容，不由 Ollama 自由生成。
+CLINICAL_REFERENCE_RULES: tuple[tuple[str, str, str], ...] = (
+    (
+        "Aortic enlargement",
+        "主動脈擴大",
+        "建議比對既往影像，並結合病史、血壓及正式影像判讀，"
+        "進一步評估主動脈輪廓與尺寸；是否需要其他影像檢查，"
+        "應依個別臨床情況決定。",
+    ),
+    (
+        "Cardiomegaly",
+        "心臟擴大",
+        "建議結合症狀、病史、既往影像及正式影像判讀，"
+        "進一步評估心臟結構與功能；必要時可依臨床情況"
+        "考慮心電圖或心臟超音波評估。",
+    ),
+    (
+        "Pleural thickening",
+        "胸膜（肋膜）增厚",
+        "建議比對既往影像；若合併不明原因的單側胸腔積液"
+        "或其他可疑影像特徵，可依臨床情況評估追蹤影像"
+        "或進一步胸部 CT。",
+    ),
+    (
+        "Pulmonary fibrosis",
+        "肺纖維化",
+        "建議結合肺功能、既往影像及臨床表現，"
+        "進一步評估間質性肺部疾病的可能性；"
+        "必要時可依臨床情況考慮高解析度胸部 CT"
+        "或相關專科評估。",
+    ),
+    (
+        "Pleural effusion",
+        "胸膜（肋膜）積液",
+        "建議結合症狀、病史、積液側別、範圍及正式影像判讀，"
+        "進一步評估可能病因；可依臨床情況考慮追蹤影像、"
+        "胸腔超音波或胸部 CT。",
+    ),
+)
+
+
+def predicted_label_names(payload: dict[str, Any] | None) -> set[str]:
+    if not payload:
+        return set()
+    names = {str(name) for name in (payload.get("predicted_class_names_en") or [])}
     if names:
         return names
     vector = payload.get("predicted_label_vector") or payload.get("predicted_vector")
@@ -883,42 +1202,28 @@ def predicted_label_names(payload: dict[str, Any]) -> set[str]:
     return names
 
 
-def build_followup_guidance(payload: dict[str, Any]) -> str:
+def clinical_reference_entries(payload: dict[str, Any] | None) -> list[tuple[str, str, str]]:
+    """Return fixed entries in the formal five-class model order."""
     predicted = predicted_label_names(payload)
-    lines = [
-        "## \u4e00\u822c\u5f8c\u7e8c\u6aa2\u67e5\u8207\u8655\u7f6e\u65b9\u5411\uff08\u975e\u6b63\u5f0f\u91ab\u7642\u5efa\u8b70\uff09",
-        "\u672c\u6bb5\u50c5\u4f9d\u64da AI \u6a21\u578b\u8f38\u51fa\u7684\u967d\u6027\u985e\u5225\u63d0\u4f9b\u4e00\u822c\u6027\u5f8c\u7e8c\u6aa2\u67e5\u65b9\u5411\uff0c\u4e0d\u4ee3\u8868\u78ba\u8a3a\u6216\u6cbb\u7642\u65b9\u6848\u3002",
-    ]
-    label_guidance = {
-        "Aortic enlargement": "- \u82e5\u6a21\u578b\u9810\u6e2c\u300c\u4e3b\u52d5\u8108\u64f4\u5927\u300d\u6a5f\u7387\u8f03\u9ad8\uff0c\u53ef\u7531\u91ab\u5e2b\u8a55\u4f30\u662f\u5426\u9700\u8981\u5fc3\u81df\u8840\u7ba1\u76f8\u95dc\u6aa2\u67e5\u3001\u80f8\u90e8 CTA / MRA \u6216\u5f8c\u7e8c\u5f71\u50cf\u8ffd\u8e64\u3002",
-        "Cardiomegaly": "- \u82e5\u6a21\u578b\u9810\u6e2c\u300c\u5fc3\u81df\u64f4\u5927\u300d\u6a5f\u7387\u8f03\u9ad8\uff0c\u53ef\u7531\u91ab\u5e2b\u8a55\u4f30\u662f\u5426\u9700\u8981\u5fc3\u81df\u8d85\u97f3\u6ce2\u3001\u5fc3\u96fb\u5716\u6216\u5176\u4ed6\u5fc3\u81df\u76f8\u95dc\u8a55\u4f30\u3002",
-        "Pleural thickening": "- \u82e5\u6a21\u578b\u9810\u6e2c\u300c\u80f8\u819c\uff08\u808b\u819c\uff09\u589e\u539a\u300d\u6a5f\u7387\u8f03\u9ad8\uff0c\u53ef\u7531\u91ab\u5e2b\u8a55\u4f30\u662f\u5426\u9700\u8981\u8ffd\u8e64\u80f8\u90e8 X \u5149\u3001\u80f8\u90e8 CT \u6216\u80f8\u8154\u79d1\u76f8\u95dc\u8a55\u4f30\u3002",
-        "Pulmonary fibrosis": "- \u82e5\u6a21\u578b\u9810\u6e2c\u300c\u80ba\u7e96\u7dad\u5316\u300d\u6a5f\u7387\u8f03\u9ad8\uff0c\u53ef\u7531\u91ab\u5e2b\u8a55\u4f30\u662f\u5426\u9700\u8981\u9ad8\u89e3\u6790\u5ea6\u80f8\u90e8 CT\uff08HRCT\uff09\u3001\u80ba\u529f\u80fd\u6aa2\u67e5\u6216\u80f8\u8154\u79d1\u76f8\u95dc\u8a55\u4f30\u3002",
-        "Pleural effusion": "- \u82e5\u6a21\u578b\u9810\u6e2c\u300c\u80f8\u819c\uff08\u808b\u819c\uff09\u7a4d\u6db2\u300d\u6a5f\u7387\u8f03\u9ad8\uff0c\u53ef\u7531\u91ab\u5e2b\u4f9d\u75c7\u72c0\u3001\u75c5\u53f2\u8207\u6b63\u5f0f\u5f71\u50cf\u5224\u8b80\u7d50\u679c\uff0c\u8a55\u4f30\u662f\u5426\u9700\u8981\u8ffd\u8e64\u5f71\u50cf\u3001\u8d85\u97f3\u6ce2\u8f14\u52a9\u8a55\u4f30\u6216\u80f8\u8154\u79d1\u76f8\u95dc\u8a55\u4f30\u3002",
-    }
-    appended = False
-    for label in CLASS_MAPPING_EN.values():
-        if label in predicted and label in label_guidance:
-            lines.append(label_guidance[label])
-            appended = True
-    if not appended:
-        lines.append("- \u6a21\u578b\u672a\u5075\u6e2c\u5230\u8d85\u904e\u95be\u503c\u7684\u967d\u6027\u985e\u5225\uff1b\u82e5\u4f7f\u7528\u8005\u4ecd\u6709\u75c7\u72c0\u6216\u81e8\u5e8a\u7591\u616e\uff0c\u53ef\u7531\u91ab\u5e2b\u8a55\u4f30\u662f\u5426\u9700\u8981\u8ffd\u8e64\u6aa2\u67e5\u3002")
-    if "Pleural thickening" not in predicted and "Pleural effusion" not in predicted:
-        lines.append("- \u82e5\u5f8c\u7e8c\u6b63\u5f0f\u5224\u8b80\u6216\u81e8\u5e8a\u8a55\u4f30\u6d89\u53ca\u80f8\u819c\uff08\u808b\u819c\uff09\u589e\u539a\u6216\u7a4d\u6db2\uff0c\u53ef\u7531\u91ab\u5e2b\u8a55\u4f30\u662f\u5426\u9700\u8981\u80f8\u90e8 CT\u3001\u8ffd\u8e64\u80f8\u90e8 X \u5149\u6216\u80f8\u8154\u79d1\u76f8\u95dc\u8a55\u4f30\u3002")
-    lines.append("\u4ee5\u4e0a\u5167\u5bb9\u70ba\u5b78\u8853 Demo \u7684\u4e00\u822c\u6027\u5f8c\u7e8c\u6aa2\u67e5\u65b9\u5411\uff0c\u4e0d\u61c9\u7528\u4f86\u53d6\u4ee3\u91ab\u5e2b\u7684\u6b63\u5f0f\u5224\u8b80\u8207\u81e8\u5e8a\u6c7a\u7b56\u3002")
-    return "\n".join(lines)
+    return [rule for rule in CLINICAL_REFERENCE_RULES if rule[0] in predicted]
 
+
+def build_followup_guidance(payload: dict[str, Any] | None) -> str:
+    """Build deterministic clinical reference Markdown from thresholded predictions."""
+    sections = ["## 臨床評估參考", CLINICAL_REFERENCE_INTRO]
+    entries = clinical_reference_entries(payload)
+    if entries:
+        for _model_label, display_name, fixed_text in entries:
+            sections.append(f"**{display_name}**\n{fixed_text}")
+    else:
+        sections.append(CLINICAL_REFERENCE_NO_POSITIVE)
+    sections.append(CLINICAL_REFERENCE_WARNING)
+    return "\n\n".join(sections)
 
 def ensure_disclaimer(report: str) -> str:
     if DISCLAIMER in report:
         return report
     return f"{report.rstrip()}\n\n---\n{DISCLAIMER}"
-
-
-def append_followup_guidance(report: str, payload: dict[str, Any]) -> str:
-    title = "\u4e00\u822c\u5f8c\u7e8c\u6aa2\u67e5\u8207\u8655\u7f6e\u65b9\u5411"
-    enriched = report if title in report else f"{report.rstrip()}\n\n{build_followup_guidance(payload)}"
-    return ensure_disclaimer(enriched)
 
 
 def markdown_to_plain_text(markdown: str) -> str:
@@ -1119,9 +1424,97 @@ def report_impression_items(prediction: dict[str, Any] | None) -> list[str]:
 
 
 def clean_recommendation_text(prediction: dict[str, Any] | None) -> str:
+    """Return the fixed clinical reference section without its Markdown heading."""
     recommendation = build_followup_guidance(report_payload_from_prediction(prediction))
-    recommendation = recommendation.replace("## \u4e00\u822c\u5f8c\u7e8c\u6aa2\u67e5\u8207\u8655\u7f6e\u65b9\u5411\uff08\u975e\u6b63\u5f0f\u91ab\u7642\u5efa\u8b70\uff09\n", "")
-    return recommendation.strip()
+    return recommendation.removeprefix("## 臨床評估參考\n\n").strip()
+
+
+def clinical_reference_html(prediction: dict[str, Any] | None) -> str:
+    """Render fixed clinical reference content without using Ollama or Ground Truth."""
+    entries = clinical_reference_entries(report_payload_from_prediction(prediction))
+    if entries:
+        content = "".join(
+            "<div class='clinical-reference-item'>"
+            f"<strong>{html_text(display_name)}</strong>"
+            f"<p>{paragraph_html(fixed_text)}</p>"
+            "</div>"
+            for _model_label, display_name, fixed_text in entries
+        )
+    else:
+        content = (
+            "<div class='clinical-reference-empty'>"
+            f"{paragraph_html(CLINICAL_REFERENCE_NO_POSITIVE)}"
+            "</div>"
+        )
+    return (
+        "<div class='clinical-reference'>"
+        f"<p class='clinical-reference-intro'>{paragraph_html(CLINICAL_REFERENCE_INTRO)}</p>"
+        f"{content}"
+        "<div class='clinical-reference-warning'>"
+        f"{paragraph_html(CLINICAL_REFERENCE_WARNING)}"
+        "</div></div>"
+    )
+
+
+def validate_clinical_reference_rules() -> None:
+    """Fail fast if the five deterministic rule mappings drift or leak other inputs."""
+    expected_labels = [rule[0] for rule in CLINICAL_REFERENCE_RULES]
+    expected_names = [rule[1] for rule in CLINICAL_REFERENCE_RULES]
+    if expected_labels != [
+        "Aortic enlargement",
+        "Cardiomegaly",
+        "Pleural thickening",
+        "Pulmonary fibrosis",
+        "Pleural effusion",
+    ]:
+        raise RuntimeError("Clinical reference model-label order changed")
+
+    all_positive = {
+        "predicted_class_names_en": expected_labels,
+        "predicted_label_vector": [1, 1, 1, 1, 1],
+    }
+    all_text = build_followup_guidance(all_positive)
+    positions = [all_text.index(name) for name in expected_names]
+    if positions != sorted(positions):
+        raise RuntimeError("Clinical reference display order changed")
+    if any(all_text.count(name) != 1 for name in expected_names):
+        raise RuntimeError("All-positive clinical reference test failed")
+
+    for index, (model_label, display_name, _fixed_text) in enumerate(CLINICAL_REFERENCE_RULES):
+        vector = [0, 0, 0, 0, 0]
+        vector[index] = 1
+        single = build_followup_guidance({
+            "predicted_class_names_en": [model_label],
+            "predicted_label_vector": vector,
+        })
+        if single.count(display_name) != 1:
+            raise RuntimeError(f"Single-positive clinical reference test failed: {model_label}")
+        if any(other in single for other in expected_names if other != display_name):
+            raise RuntimeError(f"Single-positive isolation failed: {model_label}")
+
+    none_text = build_followup_guidance({
+        "predicted_class_names_en": [],
+        "predicted_label_vector": [0, 0, 0, 0, 0],
+    })
+    if CLINICAL_REFERENCE_NO_POSITIVE not in none_text:
+        raise RuntimeError("All-negative clinical reference test failed")
+
+    prediction = {
+        "predicted_class_names_en": ["Cardiomegaly"],
+        "predicted_label_vector": [0, 1, 0, 0, 0],
+    }
+    with_ground_truth = {
+        **prediction,
+        "ground_truth_label_vector": [1, 0, 1, 0, 1],
+        "exact_match": False,
+    }
+    if clinical_reference_html(prediction) != clinical_reference_html(with_ground_truth):
+        raise RuntimeError("Ground Truth affected clinical reference content")
+
+    forbidden = ("BTS", "NICE", "ACC", "AHA", "source", "rule_id")
+    rendered = clinical_reference_html(all_positive)
+    if any(term in rendered for term in forbidden):
+        raise RuntimeError("Forbidden front-end term found in clinical reference content")
 
 
 def report_download_links_html(session_dir: Path | None) -> str:
@@ -1148,7 +1541,6 @@ def blank_report_sheet_html(message: str | None = None) -> str:
         "<div class=\"sheet-subtitle\">AI-assisted Chest X-ray Diagnostic Report</div>"
         "</div><div class=\"research-stamp\">研究驗證</div></div>"
         f"<section class=\"sheet-section\"><p>{paragraph_html(message)}</p></section>"
-        f"<section class=\"sheet-section\"><div class=\"warning-note\">{paragraph_html(DISCLAIMER)}</div></section>"
         "</article>"
     )
 
@@ -1171,9 +1563,7 @@ def report_sheet_html(report: str, prediction: dict[str, Any] | None, patient: d
     )
     findings = report_findings_text(report, prediction)
     impression = "".join(f"<li>{paragraph_html(item)}</li>" for item in report_impression_items(prediction))
-    recommendation = clean_recommendation_text(prediction)
-    downloads = report_download_links_html(session_dir)
-    model_limit = "本模型僅依完整胸腔 X 光影像進行五類多標籤預測，不輸出病灶位置、邊界框、嚴重程度或正式臨床診斷。"
+    clinical_reference = clinical_reference_html(prediction)
     return (
         "<article id=\"diagnosis-sheet\" class=\"diagnosis-sheet\">"
         "<div class=\"sheet-header\"><div>"
@@ -1191,13 +1581,8 @@ def report_sheet_html(report: str, prediction: dict[str, Any] | None, patient: d
         f"<p>{paragraph_html(findings)}</p></section>"
         "<section class=\"sheet-section\"><h3>◉ 影像印象</h3>"
         f"<ol>{impression}</ol></section>"
-        "<section class=\"sheet-section\"><h3>◉ 建議與後續評估</h3>"
-        f"<p>{paragraph_html(recommendation)}</p></section>"
-        "<section class=\"sheet-section\"><h3>◉ 模型限制</h3>"
-        f"<p>{paragraph_html(model_limit)}</p></section>"
-        "<section class=\"sheet-section\"><div class=\"warning-note\"><strong>⚠ 研究用途警語</strong><br>"
-        f"{paragraph_html(DISCLAIMER)}</div></section>"
-        f"{downloads}"
+        "<section class=\"sheet-section\"><h3>◉ 臨床評估參考</h3>"
+        f"{clinical_reference}</section>"
         "</article>"
     )
 
@@ -1231,14 +1616,8 @@ def report_sheet_markdown(report: str, prediction: dict[str, Any] | None, patien
     lines.extend(f"{index}. {item}" for index, item in enumerate(report_impression_items(prediction), start=1))
     lines.extend([
         "",
-        "## 5. 建議與後續評估",
+        "## 5. 臨床評估參考",
         clean_recommendation_text(prediction),
-        "",
-        "## 6. 模型限制",
-        "本系統為五類胸腔 X 光多標籤分類模型，不輸出病灶位置或邊界框，亦無法涵蓋五類以外的其他胸腔異常。",
-        "",
-        "## 7. 研究用途警語",
-        DISCLAIMER,
         "",
     ])
     return "\n".join(lines)
@@ -1431,23 +1810,48 @@ def format_ground_truth(prediction: dict[str, Any], catalog_path: Path | str | N
         + f"{prediction['sample_recall']:.4f} / {prediction['sample_f1']:.4f}\n"
         + f"- **\u7d50\u679c\u89e3\u8b80\uff1a** {interpretation}"
     )
-def probability_table(prediction: dict[str, Any]) -> pd.DataFrame:
-    rows = [
-        [
+def probability_table(prediction: dict[str, Any]) -> str:
+    """Render a stable, styled HTML table without depending on Gradio Dataframe DOM."""
+    header_html = "".join(f"<th>{html_text(column)}</th>" for column in PROBABILITY_TABLE_COLUMNS)
+    body_rows: list[str] = []
+    predicted_ids_available = "predicted_class_ids" in prediction
+    predicted_ids = {int(value) for value in (prediction.get("predicted_class_ids") or [])}
+
+    for row in prediction["probability_rows"]:
+        class_id = int(row["class_id"])
+        probability = float(row["probability"])
+        threshold = float(row["threshold"])
+        is_positive = class_id in predicted_ids if predicted_ids_available else probability >= threshold
+        row_class = "prob-positive" if is_positive else "prob-negative"
+
+        # Use the backend's predicted class IDs for color, so styling does not depend
+        # on whether decision text is 陽性/陰性/Positive/Negative.
+        decision_text = str(row.get("decision") or ("陽性" if is_positive else "陰性"))
+        cells = (
             row["class_id"],
             row["class_name_en"],
             row["class_name_zh"],
-            round(row["probability"], 6),
-            round(row["threshold"], 6),
-            row["decision"],
-        ]
-        for row in prediction["probability_rows"]
-    ]
-    return pd.DataFrame(rows, columns=PROBABILITY_TABLE_COLUMNS)
+            f"{probability:.6f}",
+            f"{threshold:.6f}",
+            decision_text,
+        )
+        cells_html = "".join(f"<td>{html_text(value)}</td>" for value in cells)
+        body_rows.append(f"<tr class='{row_class}'>{cells_html}</tr>")
+
+    return (
+        "<div class='probability-table-frame'>"
+        "<div class='probability-table-wrap'>"
+        "<table class='probability-table'>"
+        f"<thead><tr>{header_html}</tr></thead>"
+        f"<tbody>{''.join(body_rows)}</tbody>"
+        "</table>"
+        "</div>"
+        "</div>"
+    )
 
 
-def empty_probability_table() -> pd.DataFrame:
-    return pd.DataFrame(columns=PROBABILITY_TABLE_COLUMNS)
+def empty_probability_table() -> str:
+    return "<div class='probability-table-empty'>尚未進行分析</div>"
 
 
 def log_ui_exception(output_dir: Path, stage: str, exc: BaseException) -> None:
@@ -1829,18 +2233,19 @@ def build_demo(
         top_ollama_ok = top_ollama_health.get("status") == "PASS"
     except Exception:
         top_ollama_ok = False
-    top_model = ollama.selected_model or ollama.requested_model
+    # Top bar intentionally stays free of backend jargon (Ollama, model codename,
+    # SHA256, etc.) — that detail lives in the "系統狀態" card at the bottom right,
+    # which is the appropriate place for maintainers, not the page clinicians see first.
     topbar = (
         "<header class='app-topbar'>"
         "<div><div class='app-title-row'>"
         "<h1>AI 輔助胸腔 X 光多標籤辨識系統</h1>"
         "<span class='research-pill'>研究用途</span>"
         "</div>"
-        "<p>Full-image 224×224 Multi-label Classification with Ollama-assisted Explanation</p>"
+        "<p>五類胸腔 X 光異常輔助偵測與 AI 說明產生</p>"
         "</div>"
         "<div class='top-health'>"
-        f"<div class='health-ok'><span class='health-dot'>●</span>Ollama {'連線正常' if top_ollama_ok else '暫時無法使用'}</div>"
-        f"<div><strong>模型：</strong>{html_text(top_model)}</div>"
+        f"<div class='health-ok'><span class='health-dot'>●</span>AI 輔助說明服務：{'正常運作中' if top_ollama_ok else '暫時無法使用'}</div>"
         "</div></header>"
     )
 
@@ -1850,7 +2255,12 @@ def build_demo(
 
             with gr.Column(elem_classes=["ui-card", "patient-card"]):
                 gr.HTML(
-                    "<div class='ui-card-header'><h3>♟ 病人資訊</h3></div>",
+                    "<div class='ui-card-header'><h3>"
+                    "<svg class='header-icon' width='16' height='16' viewBox='0 0 24 24' fill='none' "
+                    "stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'>"
+                    "<circle cx='12' cy='8' r='3.6'></circle>"
+                    "<path d='M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2'></path>"
+                    "</svg>病人資訊</h3></div>",
                     elem_classes=["card-header-host"],
                 )
                 with gr.Row(elem_classes=["ui-card-body", "patient-fields"]):
@@ -1863,36 +2273,52 @@ def build_demo(
 
             with gr.Row(equal_height=False, elem_classes=["main-grid"]):
                 with gr.Column(scale=1, elem_classes=["left-pane"]):
-                    with gr.Column(elem_classes=["ui-card", "image-card"]):
-                        gr.HTML("<div class='ui-card-header'><h3>完整胸腔 X 光影像</h3></div>", elem_classes=["card-header-host"])
+                    with gr.Column(elem_classes=["image-card"]):
+                        gr.HTML(
+                            "<div class='ui-card-header'>"
+                            "<h3>完整胸腔 X 光影像</h3>"
+                            "</div>",
+                            elem_classes=["card-header-host"],
+                        )
+
                         with gr.Column(elem_classes=["image-host"]):
                             image_input = gr.Image(
                                 type="filepath",
                                 image_mode=None,
                                 sources=["upload"],
-                                label="完整胸腔 X 光（PNG／JPG／JPEG）",
+                                label=None,
+                                show_label=False,
                                 height=390,
+                                elem_id="cxr-image-input",
                             )
+
+                            # 保留為隱藏輸出，避免影響原本 callback 輸出順序。
+                            image_metadata = gr.JSON(
+                                value=None,
+                                label=None,
+                                visible=False,
+                            )
+
                         with gr.Row(elem_classes=["action-row"]):
-                            analyze_button = gr.Button("▶ 開始分析", variant="primary", elem_classes=["primary-action"])
-                            regenerate_button = gr.Button("↻ 重新產生說明", elem_classes=["secondary-action"])
-                            print_button_left = gr.Button("▣ 列印／匯出 PDF", elem_classes=["print-action", "no-print"])
-                            clear_button = gr.Button("♲ 清除", elem_classes=["danger-action"])
-                        examples = fixed_examples(catalog_dir)
-                        if examples:
-                            with gr.Accordion("Demo 圖片", open=False, elem_classes=["image-aux"]):
-                                gr.Examples(
-                                    examples=examples,
-                                    inputs=[image_input],
-                                    cache_examples=False,
-                                    api_visibility="private",
-                                    label="Demo 圖片",
-                                )
-                        with gr.Accordion("影像資訊", open=False, elem_classes=["image-aux"]):
-                            image_metadata = gr.JSON(label="影像資訊")
+                            analyze_button = gr.Button(
+                                "▶ 開始分析",
+                                variant="primary",
+                                elem_classes=["primary-action"],
+                            )
+                            regenerate_button = gr.Button(
+                                "↻ 重新產生說明",
+                                elem_classes=["secondary-action"],
+                            )
+                            clear_button = gr.Button(
+                                "✕ 清除",
+                                elem_classes=["danger-action"],
+                            )
 
                     with gr.Column(elem_classes=["ui-card"]):
-                        gr.HTML("<div class='ui-card-header'><h3>分析狀態</h3></div>", elem_classes=["card-header-host"])
+                        gr.HTML(
+                            "<div class='ui-card-header'><h3>分析狀態</h3></div>",
+                            elem_classes=["card-header-host"],
+                        )
                         with gr.Column(elem_classes=["ui-card-body"]):
                             status = gr.HTML(
                                 value=format_analysis_status_html(message="等待分析"),
@@ -1900,49 +2326,78 @@ def build_demo(
                             )
 
                     with gr.Column(elem_classes=["ui-card"]):
-                        gr.HTML("<div class='ui-card-header'><h3>五類疾病機率（Validation Threshold）</h3></div>", elem_classes=["card-header-host"])
-                        with gr.Column(elem_classes=["ui-card-body"]):
-                            probability_dataframe = gr.Dataframe(
-                                headers=["類別", "英文名稱", "中文名稱", "機率", "Threshold", "判定"],
-                                datatype=["number", "str", "str", "number", "number", "str"],
-                                interactive=False,
-                                label=None,
+                        gr.HTML(
+                            "<div class='ui-card-header'>"
+                            "<h3>五類疾病機率（Validation Threshold）</h3>"
+                            "</div>",
+                            elem_classes=["card-header-host"],
+                        )
+                        with gr.Column(elem_classes=["ui-card-body", "probability-card-body"]):
+                            probability_dataframe = gr.HTML(
+                                value=empty_probability_table(),
+                                elem_id="probability-table-host",
+                                elem_classes=["probability-table-host"],
                             )
-                            with gr.Accordion("查看機率圖", open=False):
-                                probability_plot = gr.Plot(label="五類模型機率與 Validation thresholds")
+                            with gr.Accordion(
+                                "查看機率圖",
+                                open=False,
+                                elem_classes=["app-accordion"],
+                            ):
+                                probability_plot = gr.Plot(
+                                    label=None,
+                                    show_label=False,
+                                )
 
-                    with gr.Column(elem_classes=["ui-card"]):
-                        gr.HTML("<div class='ui-card-header'><h3>Ground Truth 比對（Test set）</h3></div>", elem_classes=["card-header-host"])
+                    with gr.Accordion(
+                        "Ground Truth 比對（僅供研發驗證用，一般看診不需要展開）",
+                        open=False,
+                        elem_classes=["ui-card", "gt-accordion", "app-accordion"],
+                    ):
                         with gr.Column(elem_classes=["ui-card-body"]):
-                            ground_truth_output = gr.Markdown(elem_classes=["transparent-output", "gt-compact"])
+                            ground_truth_output = gr.Markdown(
+                                elem_classes=["transparent-output", "gt-compact"]
+                            )
 
                 with gr.Column(scale=1, elem_classes=["right-pane"]):
-                    with gr.Column(elem_classes=["ui-card", "summary-card"]):
-                        gr.HTML("<div class='ui-card-header'><h3>模型預測摘要</h3></div>", elem_classes=["card-header-host"])
-                        with gr.Column(elem_classes=["ui-card-body"]):
-                            prediction_summary = gr.Markdown(elem_classes=["transparent-output", "prediction-summary"])
+                    # 保留為隱藏輸出，維持既有分析 callback 的輸出順序。
+                    prediction_summary = gr.Markdown(
+                        value="",
+                        visible=False,
+                    )
 
-                    with gr.Column(elem_classes=["ui-card", "report-card"], elem_id="report-card"):
-                        with gr.Row(elem_classes=["ui-card-header", "report-toolbar"]):
-                            gr.HTML("<div class='header-copy'><h3>AI 輔助胸腔 X 光診斷說明書</h3></div>", elem_classes=["card-header-host"])
-                            print_button = gr.Button("▣ 列印／匯出 PDF", elem_classes=["sheet-print-button", "no-print"])
-                        with gr.Column(elem_classes=["report-body"]):
-                            ollama_report = gr.HTML(value=blank_report_sheet_html(), elem_classes=["report-html-host"])
-
-                    with gr.Column(elem_classes=["ui-card", "system-card", "no-print"]):
-                        gr.HTML("<div class='ui-card-header'><h3>系統狀態</h3></div>", elem_classes=["card-header-host"])
-                        with gr.Column(elem_classes=["ui-card-body"]):
-                            system_output = gr.HTML(
-                                value=format_system_status_html(system_status(inference, ollama)),
-                                elem_classes=["system-html-host"],
+                    with gr.Column(
+                        elem_classes=["ui-card", "report-card"],
+                        elem_id="report-card",
+                    ):
+                        with gr.Row(
+                            elem_classes=["ui-card-header", "report-toolbar"]
+                        ):
+                            gr.HTML(
+                                "<div class='header-copy'>"
+                                "<h3>AI 輔助胸腔 X 光診斷說明書</h3>"
+                                "</div>",
+                                elem_classes=["card-header-host"],
                             )
-                            with gr.Accordion("詳細狀態與時間", open=False):
-                                ollama_status = gr.JSON(label="Ollama 狀態")
-                                with gr.Row():
-                                    classification_seconds = gr.Number(label="模型推論秒數", precision=6)
-                                    ollama_seconds = gr.Number(label="Ollama 生成秒數", precision=6)
-                                    total_seconds = gr.Number(label="總耗時秒數", precision=6)
-                                session_path = gr.Textbox(label="Session 輸出路徑", interactive=False)
+                            print_button = gr.Button(
+                                "▣ 列印／匯出 PDF",
+                                elem_classes=["sheet-print-button", "no-print"],
+                            )
+                        with gr.Column(elem_classes=["report-body"]):
+                            ollama_report = gr.HTML(
+                                value=blank_report_sheet_html(),
+                                elem_classes=["report-html-host"],
+                            )
+
+                    # 保留為隱藏輸出，維持分析與重新產生 callback 的既有輸出順序。
+                    system_output = gr.HTML(
+                        value=format_system_status_html(system_status(inference, ollama)),
+                        visible=False,
+                    )
+                    ollama_status = gr.JSON(value=None, visible=False)
+                    classification_seconds = gr.Number(value=0.0, visible=False)
+                    ollama_seconds = gr.Number(value=0.0, visible=False)
+                    total_seconds = gr.Number(value=0.0, visible=False)
+                    session_path = gr.Textbox(value="", visible=False)
 
             last_result_state = gr.State(value=None)
 
@@ -2001,7 +2456,7 @@ def build_demo(
                 queue=False,
                 api_visibility="private",
             )
-            queued.then(
+            analyzed = queued.then(
                 fn=analyze_event,
                 inputs=[image_input, record_number, patient_name, patient_sex, patient_age, exam_date, patient_note],
                 outputs=analysis_outputs,
@@ -2011,15 +2466,14 @@ def build_demo(
                 api_visibility="private",
             )
 
-            for print_control in (print_button, print_button_left):
-                print_control.click(
-                    fn=None,
-                    inputs=None,
-                    outputs=None,
-                    js="() => { window.print(); return []; }",
-                    queue=False,
-                    api_visibility="private",
-                )
+            print_button.click(
+                fn=None,
+                inputs=None,
+                outputs=None,
+                js="() => { window.print(); return []; }",
+                queue=False,
+                api_visibility="private",
+            )
 
             regenerate_button.click(
                 fn=regenerate_event,
@@ -2379,6 +2833,7 @@ def startup_audit(
 
 
 def main() -> int:
+    validate_clinical_reference_rules()
     args = resolve_args(parse_args())
     if not args.model.is_file() or not args.thresholds.is_file():
         raise RuntimeError("Formal Full-image model or Validation thresholds are missing")
